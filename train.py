@@ -20,7 +20,7 @@ if __name__ == "__main__":
     data_set = FVCDataset()
     train_loader = data.DataLoader(
         dataset=data_set,
-        batch_size=1,
+        batch_size=16,
         shuffle=True,
     )
 
