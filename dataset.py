@@ -25,8 +25,15 @@ class FVCDataset(Dataset):
         transformed_image: torch.Tensor = self.resize(image)
         transformed_label: torch.Tensor = self.resize(label)
 
-        if transformed_label.max() > 1:
-            transformed_label = transformed_label / 255
+        # 陽春的二值化
+        transformed_label = transformed_label / label.max()
+        transformed_label[transformed_label >= 0.7] = 1
+        transformed_label[transformed_label < 0.7] = 0
+
+        # print('transformed_label.shape')
+        # print(transformed_label.shape)
+        # print('transformed_label')
+        # print(transformed_label)
 
         return transformed_image, transformed_label
     

@@ -43,11 +43,10 @@ if __name__ == "__main__":
         
         # pred = resizeToBackTo150(pred)
         
-        ####################
-        # pred = pred / torch.max(pred)
+        #################### 0.7 / 0.5
         pred = pred / pred.max()
-        pred = pred * 255
-        print(pred)
+        pred[pred >= 0.7] = 255
+        pred[pred < 0.7] = 0
         
         # # TODO: 提取结果
         pred = np.array(pred.data.cpu()[0])[0]
