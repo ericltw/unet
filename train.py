@@ -7,6 +7,7 @@ import torch
 import torch.utils.data as data
 from torch import optim
 from torch import Tensor
+# import pytorch_ssim
 
 if __name__ == "__main__":
     # cpu or gpu
@@ -24,11 +25,13 @@ if __name__ == "__main__":
         shuffle=True,
     )
 
-    # TODO: Optimizer
+    # Optimizer用於調整model參數以減少model誤差的過程。Optimization algorithms定義了這個過程是如何執行的，
+    # 常見的Optimizer如：SGD, ADAM, RMSProp。
     optimizer: optim.RMSprop = optim.RMSprop(model.parameters(), lr=0.00001, weight_decay=1e-8, momentum=0.9)
 
-    # TODO: Loss算法
+    # Loss function用於衡量得到結果與目標值之間的不相似程度，是我們在訓練過程中想要最小化的損失函數。
     criterion: nn.BCEWithLogitsLoss = nn.BCEWithLogitsLoss()
+
     # best_loss統計，初始化為正無窮
     best_loss = float('inf')
 

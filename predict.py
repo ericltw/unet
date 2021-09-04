@@ -19,30 +19,37 @@ if __name__ == "__main__":
     net.eval()
     
     tests_path = glob.glob('data/test/*.png')
-    resize = transforms.Compose([
+    resizeTo160 = transforms.Compose([
         transforms.Resize(160)
+    ])
+    resizeToBackTo150 = transforms.Compose([
+        transforms.Resize(150)
     ])
 
     for test_path in tests_path:
         # 保存结果地址
         save_res_path = test_path.split('.')[0] + '_res.png'
         # 讀取圖片
-        img = cv2.imread(test_path)
-        # TODO: 轉為灰階圖
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-        # 轉為batch為1，通道為1，大小為150*150
-        img = img.reshape(1, 1, img.shape[0], img.shape[1])
-        # 轉為tensor
-        img_tensor = torch.from_numpy(img)
-        # 
-        img_tensor = resize(img_tensor) 
+        image = read_image(test_path)
+
+        image = image.unsqueeze(1)
+
+        image = resizeTo160(image) 
         # 將tensor copy到device中，只用cpu就是copy到cpu中，用cuda就是copy到cuda中。
-        img_tensor = img_tensor.to(device=device, dtype=torch.float32)
+        image = image.to(device=device, dtype=torch.float32)
+        
         # 預測
-        pred = net(img_tensor)
-        # TODO: 提取结果
+        pred = net(image)
+        
+        # pred = resizeToBackTo150(pred)
+        
+        ####################
+        # pred = pred / torch.max(pred)
+        pred = pred / pred.max()
+        pred = pred * 255
+        print(pred)
+        
+        # # TODO: 提取结果
         pred = np.array(pred.data.cpu()[0])[0]
-        # TODO: 處理結果
-        pred = pred * 300
         # 保存圖片
         cv2.imwrite(save_res_path, pred)

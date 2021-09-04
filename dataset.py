@@ -1,10 +1,9 @@
-import torch
-from torch.utils.data import Dataset
 import glob
 import os
+import torch
+from torch.utils.data import Dataset
 from torchvision.io import read_image
 import torchvision.transforms as transforms
-import torchvision.transforms.functional as functional
 
 class FVCDataset(Dataset):
     def __init__(self):
@@ -24,7 +23,10 @@ class FVCDataset(Dataset):
         label: torch.Tensor = read_image(label_path)
         
         transformed_image: torch.Tensor = self.resize(image)
-        transformed_label: torch.Tensor = self.resize(label)   
+        transformed_label: torch.Tensor = self.resize(label)
+
+        if transformed_label.max() > 1:
+            transformed_label = transformed_label / 255
 
         return transformed_image, transformed_label
     
