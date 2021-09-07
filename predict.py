@@ -41,10 +41,7 @@ if __name__ == "__main__":
         # 預測
         pred = net(image)
         
-        # pred = resizeToBackTo150(pred)
-        
         ####################
-        # pred = pred / torch.max(pred)
         pred = pred / pred.max()
         pred = pred * 255
         print(pred)

@@ -30,7 +30,7 @@ if __name__ == "__main__":
     optimizer: optim.RMSprop = optim.RMSprop(model.parameters(), lr=0.00001, weight_decay=1e-8, momentum=0.9)
 
     # Loss function用於衡量得到結果與目標值之間的不相似程度，是我們在訓練過程中想要最小化的損失函數。
-    criterion: nn.BCEWithLogitsLoss = nn.BCEWithLogitsLoss()
+    criterion: nn.L1Loss = nn.L1Loss()
 
     # best_loss統計，初始化為正無窮
     best_loss = float('inf')
